@@ -1,0 +1,56 @@
+Git 配置只适用于该用户
+
+    /etc/gitconfig文件:系统中对所有用户都普遍适用的配置 若使用git config 时用--system 选项，读写的就是这个文件
+    ～/.gitconfig 文件:用户目录下的配置文件只适用于该用户。若使用git config 时用--global 选项,读写的就是这个文件
+    当前项目的Git目录中的配置文件（也就是工作目录中的 ./git/config文件）：这里的配置文件仅仅针对当前项目有效
+
+    配置用户信息
+          git config --global user.name "talewoods"
+          git config --global user.email "talewoods@sin.cn"
+          git config --global core.editor vim
+          git config --global merge.tool vimdiff
+          git config --list
+
+Git 创建仓库
+
+          git init 使用当前目录作为Git 仓库,当前目录会生成一个.git目录
+          git init newrepo 在newrepo目录下出现一个.git的目录
+
+
+          git add readme
+          git commit -m '初始化项目版本
+
+
+          git clone repo 从现有的Git仓库中拷贝项目
+          git clone repo directory  将项目克隆到指定目录
+
+
+Git 分支管理
+         
+          git branch name 创建分支
+          git checkout neme 切换分支
+          git merge 合并分支
+
+          git branch 列出在本地的分支
+          git checkout -b newtest  创建分支并立即切换到该分支
+          git branch -d name 删除分支
+ 
+
+github
+          
+          执行时加上-v 参数，你还可以看到每个别名的实际链接地址
+          git remote 
+          git remote -v                         
+
+
+          从远程仓库下载新分支与数据   git fetch 仓库名
+
+          将更新同步到本地             git merge origin/master
+                                        
+          从远端仓库提取数据并尝试合并到当前分支      git pull 
+
+
+          推送到远程仓库               git push 远程仓库 branch     将你的branch 推送到远程仓库的branch
+
+          删除远程仓库                 git remote rm 远程仓库名
+
