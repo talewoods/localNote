@@ -1,0 +1,15 @@
+脚本启动于 2017年03月01日 星期三 15时35分18秒
+[32;1mcuijiequan@G[36;1m15:35:18  ~/Document/note/Shell$[0m ls
+a.txt  b.txt  output.session  shell  [0m[01;32mtest.sh[0m  timing.log
+[32;1mcuijiequan@G[36;1m15:35:35  ~/Document/note/Shell$[0m bx[Kc
+bc 1.06.95
+Copyright 1991-1994, 1997, 1998, 2000, 2004, 2006 Free Software Foundation, Inc.
+This is free software with ABSOLUTELY NO WARRANTY.
+For details type `warranty'. 
+q
+0
+w[Kquit
+[32;1mcuijiequan@G[36;1m15:35:56  ~/Document/note/Shell$[0m exit
+exit
+
+脚本完成，于 2017年03月01日 星期三 15时36分01秒

@@ -1,0 +1,9 @@
+#!/usr/bin/expect
+
+  spawn ./try.sh
+  expect "Enter a number"
+  send "5\n"
+  expect "Enter a name"
+  send "cuijiequan\n"
+  expect eof
+ 
