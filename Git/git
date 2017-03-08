@@ -37,6 +37,8 @@ Git 分支管理
  
 
 github
+
+          添加一个远程仓库 git remote add origin git@github.com:talewoods@sina.cn/localNote
           
           执行时加上-v 参数，你还可以看到每个别名的实际链接地址
           git remote 
@@ -54,3 +56,4 @@ github
 
           删除远程仓库                 git remote rm 远程仓库名
 
+          登录github  ssh -T git@github.com
