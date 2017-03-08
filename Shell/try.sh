@@ -1,7 +1,18 @@
 #!/bin/bash
 
+if [ $# -ne 1 ];
+then
+    echo "Usage ；$0 filename";
+    exit -1;
+fi
 
-read -p "Enter a nuber" no;
-read -p "Enter a name"  name;
+filename=$1;
 
-echo  $no\'s name is $name;
+egrep -o  "\w"  $filename |\
+     awk '{count[$0]++;} 
+         END{
+               for (i in count)
+               {
+                      printf("%-14s: %d\n",i,count[i]);
+               }
+            }'

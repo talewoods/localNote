@@ -552,4 +552,105 @@ grep 文本搜索
                                cut -c 1-5 file; cut -c -5 file ; cut -c 5- file;  cut -c 1-5,6-7 --output-delimiter ","
                                cut -b
                                
-                                                                            
+使用sed进行文本替换
+
+                     sed 可以替换给定文本中的字符串
+                                                  sed 's/pattern/replace_string/' file
+                                                  cat file | sed 's/pattern/replace_string/'
+
+                     在默认情况下，sed只会打印替换后的文本。如果需要在替换的同时保存更改，可以使用-i选项，可以将替换结果应用于原文件；
+                                                  sed -i 's/text/replace_string/' file     
+
+                     之前看到的sed命令会将每一行中第一处符合模式的内容替换掉，如果要替换所有内容，我们需要在命令尾部加上参数g
+                                                  sed 's/pattern/replace_string/g' file
+
+                     字符/在sed中被作为定界符使用。可以使用任意的定界符,当定界符出现在样式内部时，必须用\进行转义
+                                                  sed 's:text:replace:g' file
+
+
+                      sed补充
+
+                              移除空白行 
+                                           sed ‘/^$/d' file
+
+                              \b表示一个单词
+                                           sed -i 's/\b[0-9]\{3\}\b/NUMBER/g' sed_data.txt
+                             
+                             &已匹配字符串标记,/w/+ 表示匹配每一个单词
+                                          echo this is an example |sed 's/\w\+/[&]/g'     
+
+                             子串匹配标记
+                                          echo this is digit 7 in a number | sed 's/digit \([0-9]\)/\1/'
+                                          \(pattern\) 用于匹配子串，对于匹配到的第一个子串，其对应的标记为\1.
+                             sed 也可以使用双引号，双引号会通过对表达式求值来对其进行扩展。
+
+                             sed -e 'expression' -e 'exprssion'      
+
+
+使用awk 进行高级文本处理
+
+
+                       awk 'BEGIN{} {command} END{}' file  或 echo this is a book | awk 'BEGIN {} {command } END{} '
+                       工作原理
+                                首先执行BEGIN 语句块中的语句；
+                                从文件中或stdin中读取一行然后执行command,重复这个过程直到文件读取完毕；
+                                当读至输入流末尾时，执行END语句块的语句；
+
+                       
+                       特殊变量
+                                NR 表示记录数量，在执行过程中对应于当前行号；
+                                NF 表示子段数量，在执行过程中对应于当前行的子段数
+                                $0 这个变量包含执行过程中当前行的文本内容
+                                $1 这个变量包含第一个字段的文本内容
+                                $2 这个变量包含第二个字段的文本内容
+
+
+                       将外部变量值传递给awk
+                                            echo |awk -v variable=$var '{print variable}'
+                                            echo |awk '{print v1,v2}' v1=$var1 v2=$var2
+                                            awk '{print v1,v2}' v1=$var1 v2=$var2 filename
+
+
+                      用getline 读取行
+                                            getline var .变量var就包含了特定行的内容。如果调用不带参数的getline，可以用$0,$1等访问文本；
+
+
+                      使用过滤模式对awk处理的行进行过滤 
+                                            awk 'NR<5'               行号小于5的行
+                                            awk 'NR==1,NR==4'        行号在1到5之间
+                                            awk '/linux/'            包含样式linux的行(可以用正则表达式来指定模式)
+                                            awk '!/linux/'           不包含 包含模式为linux的行
+          
+
+                     设置字段定界符,在BEGIN中可以用OFS="delimiter",设置输出字段的定界符
+                                            awk -F: '{print $NF}' /etc/passwd
+                                            awk 'BEGIN{FS=":"} {print $NF} ' /etc/passwd
+                       
+
+                     通过getline从awk中读取命令输出
+                                           "command " | getline output
+                                           示例  echo | awk '{"grep root /etc/passwd"|getline output; print output}'    
+
+                     awk中使用for循环
+
+                                           for(i=0;i<10;i++){print $i;}
+                                           for(i in array) {print array[i];}
+
+                     awk内建的字符串控制函数
+
+                                           length(string)
+                                           index(string,search_string) 返回search_string 在字符串的位置
+                                           split(string,array,delimiter) 用定界符生成一个字符串列表，并将列表存入数组
+                                           substr(string,start-position,end-position) 返回子串
+                                           sub(regex,replacement_str,string) 将正则表达式匹配到的第一次内容替换成replacement_str
+                                           gsub(regex,replacement_str,string)该函数会替换正则表达式匹配到的所有内容
+                                           match(regex,string) 检查正则表达式是否能够匹配字符串，如果匹配则返回非零值；否则返回零。
+                                                               match()有两个相关的特殊变量，分别是RSTART和RLENGTH。变量RSTART包含
+                                                               正则表达式所匹配内容的起始位置，而变量RLENGTH包含正则表达式所匹配内容的长度。
+
+
+按列合并多个文件
+
+               paste file1 file2 file3
+               paste 默认的定界符是制表符，使用-d 明确指定定界符
+                                 paste file1 file2 -d ","                                                                                          
