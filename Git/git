@@ -57,3 +57,7 @@ github
           删除远程仓库                 git remote rm 远程仓库名
 
           登录github  ssh -T git@github.com
+
+
+          git log file 显示文件commit记录；  git log -p file 显示文件每次修改的内容
+          git reset --hard commit-id      回滚到commit-id
