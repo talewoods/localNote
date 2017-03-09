@@ -653,4 +653,55 @@ grep 文本搜索
 
                paste file1 file2 file3
                paste 默认的定界符是制表符，使用-d 明确指定定界符
-                                 paste file1 file2 -d ","                                                                                          
+                                 paste file1 file2 -d ","     
+
+
+
+打印行或样式之间的文本
+
+               
+             打印m到n行的文本  
+                              awk 'NR==M, NR==N' filename
+                              cat filename | awk 'NR==M,NR==N'
+             打印处于start_pattern 与 end_pattern 之间的文本
+                              awk '/start_pattern/, /end_pattern/' filename
+
+
+以逆序形式打印行
+
+                tac命令，tac命令中  \n是默认的行分隔符，可以使用-s “分隔符” 选项来指定自己的分隔符
+                         tac file1 file2
+                         从stdin中读入    seq 5 | stdin
+
+                awk 实现方式
+
+                         seq 9 |\
+                         awk '{ lifo[NR]=$0} 
+                         END  { for(ino=NR;ino>=0;ino--) {print lifo[ino];}
+                              }'
+                                
+解析email地址与url地址
+
+                email地址  '[A-Za-z0-9._]+@[A-Za-z0-9.]+\.[a-zA-Z]{2,4} 
+                url地址    'http://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,4}'
+
+
+在文件中移除包含某个单词的句子
+
+                 sed 's/[^.]*mobile phones[^.]*\.//g'
+
+对目录中的所有文件进行文本替换
+
+                 find .-name *.cpp -print0 | xargs -I {} -0 | sed -i 's/Copyright/Copyleft/g' {}
+                 find . -name *.cpp -exec sed -i 's/CopyRight/Copyleft/g' \{\} \;     
+                 find . -name *.cpp -exec sed -i 's/Copyright/Copyleft/g' \{\} \+                                #### I don‘t know why?
+
+
+
+文本切片
+
+                替换变量内容中的部分文本
+                                                   echo ${var/line/Replaced}
+
+                通过指定字符串的起始位置和长度来生成子串,起始字符的索引从0计数，也可以从后向前计数，将最后一个字符索引记为-1.但负数作为索引值必须放到括号内。
+                                                   ${var:start_position:length}                                                      
