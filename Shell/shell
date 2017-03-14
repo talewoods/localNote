@@ -682,8 +682,8 @@ grep 文本搜索
                                 
 解析email地址与url地址
 
-                email地址  '[A-Za-z0-9._]+@[A-Za-z0-9.]+\.[a-zA-Z]{2,4} 
-                url地址    'http://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,4}'
+                email地址  '[A-Za-z0-9.]+@[A-Za-z0-9.]+\.[a-zA-Z]{2,4} 
+                url地址    'http://[a-zA-Z0-9.]+\.[a-zA-Z]{2,4}'
 
 
 在文件中移除包含某个单词的句子
@@ -704,4 +704,113 @@ grep 文本搜索
                                                    echo ${var/line/Replaced}
 
                 通过指定字符串的起始位置和长度来生成子串,起始字符的索引从0计数，也可以从后向前计数，将最后一个字符索引记为-1.但负数作为索引值必须放到括号内。
-                                                   ${var:start_position:length}                                                      
+                                                   ${var:start_position:length}       
+
+
+
+Web页面下载
+
+               用wget下载网页或远程文件   wget URL
+
+               指定从多个URL处进行下载    wget URL1 URL2 URL3
+              
+               选项-o可以指定一个日志文件而不将日志信息打印到stdout；选项-O指定输出文件名，如果存在同名文件，那么会先将同名文件清空；
+                                          wget ftp://example_domain.com/somefile.img -O dload_file.img -o log
+               
+               选项-t 指定重试次数
+                                          wget -t 5 URL  
+                                          wget -t 0 URL  wget 不停地进行重试
+
+               补充
+               下载限速 --limit-rate     wget  --limit-rate 20k   http://example.com/file.iso;  单位k千字节 m兆字节
+               断点续传  如果使用wget进行的下载在完成之前被中断
+                                          wget -c URL
+               下载整个网站
+                                          wget --mirror --convert-links example.com
+                                          wget -r -N -l depth -k  example.com         
+                                          -r 表示递归；-N表示使用文件的时间戳；-l 表示递归的深度；-k表示将页面的链接转换为本地地址
+
+访问需要认证的HTTP或FTP
+               wget --user username --password pass URL
+                                    --ask-password
+
+
+以纯文本的形式下载网页
+               
+               将网页内容以ASCII编码的形式存储到文本文件
+                                                         lynx URL -dump >web.txt
+                                                         w3m
+
+
+
+cURL 
+
+              将下载的文件输出到终端                      curl URL ； 
+
+              避免curl命令显示进度信息        curl URL --silent -o filename; 
+                                              curl 如果不将网页或文件写入stdout，就会将其写入和url中所指定的文件名相同的文件，如果url中找不到文件名，则产生错误
+
+              在下载过程中显示形如 ### 的进度条，用 --progress 代替 --silent
+
+              断点续传
+                       curl 能够从特定的文件偏移处继续下载，偏移量以字节为单位         curl URL/file -c offset
+                       如果只是想断点续传    curl -c - URL
+
+              用curl设置参照页字符串
+                        参照页位于http头部中的一个字符串，用来标识用户是从哪个页面到达当前页面的。
+                        curl --referer Referer_URL  target_URL
+
+              用curl设置cookie
+                        我们可以用curl 来指定并存储http操作过程中使用到的cookie,多个cookie之间使用分号分隔；
+                        curl http://example.com --cookie "user=slynux;pass=hack"
+
+              用curl 设置用户代理字符串
+                       如果不指定用户代理，一些检查用户代理的网页就无法显示。比如有些网站只能在IE下工作
+                       curl URL --user-agent "Mozilla/5.0"
+                       curl -H "Host: www.slynux.org“ -H ”Accept-language:en" URL
+              
+              限制curl的带宽
+                       curl URL --limit-rate 20k
+              
+              用URL进行认证
+                       curl -u user:pass http://test_auth.com
+                       curl -u user http://test_auth.com            提示输入密码时输入
+
+              只打印响应头部信息
+                       curl -I http://slynux.org
+                       curl --head http://slynux.org
+
+
+
+解析网站数据
+
+              lynx -dump -nolist http://www.johntorres.net/BoxOfficefemaleList.html |\
+              grep -o "Rank-.*"|
+              sed -i  's/Rank-\([0-9]*\) *\(.*\)"/\1\t\2/' |
+              sort -nk 1 >actressList
+
+图片抓取器及下载工具
+
+              
+             picture.sh
+
+
+网页相册生成器
+
+            generate_album.sh
+
+
+基于web后端的定义查询工具
+
+             define.sh
+
+查找网站中的无效链接
+
+             find_broken.sh
+
+以Post 方式发送网页并读取响应
+
+            使用curl发送POST请求并读取网站的响应(HTML)格式 -d 表示以POST方式提交用户数据
+                                   curl http://book.sarathlakshman.com/lsc/mlogs/submit.php -d "host=test-host & user=slynux"
+            使用wget --post-data 
+                                   wget http://book.sarathlakshman.com/lsc/mlogs/submit.php --post-data "host=test-host & user=slynux" -O output.htm
