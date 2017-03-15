@@ -814,3 +814,89 @@ cURL
                                    curl http://book.sarathlakshman.com/lsc/mlogs/submit.php -d "host=test-host & user=slynux"
             使用wget --post-data 
                                    wget http://book.sarathlakshman.com/lsc/mlogs/submit.php --post-data "host=test-host & user=slynux" -O output.htm
+
+
+
+
+
+B计划
+            tar归档
+                       用tar对文件进行归档   tar -cf output.tar  source;   -c 为创建文件，-f指定文件名，source 指定目录或文件名
+                       用选项-t列出归档文件中包含的文件    tar -tf archive.tar
+                       在归档或列出归档文件列表时获得更多文件的信息 -v 选项
+
+                       选项-r 追加文件到归档文件中   tar -rf archive.tar world.txt
+                       选项-x 提取文件或文件夹到指定目录  
+                                            tar -xvf archive.tar -C /path/to/extraction_directory
+                                            tar -xvf archive.tar file1 file4                             //只提取 file1 file4
+
+
+                       选项-A 合并多个tar文件 tar -Af file1.tar file2.tar
+                       通过检查时间戳来更新归档文件中的内容
+                                  添加选项可以将指定的任意文件加入到归档文件中。如果同名文件已经存在，那么结果就是归档文件中包含了两个同名的文件。
+                                  可以使用-u选项指明:只有比归档文件中的同名文件更新时才会被添加。
+                                  tar -uf archive.tar filea
+                       选项-u比较归档文件与文件系统中的同名文件是否相同
+                                  tar -df archive.tar
+                       从归档文件中删除文件
+                                  tar -f archive.tar --delete file1 file2
+                       压缩tar归档文件：-z file.tar.gz    -j file.tar.bz2   --lzma  file.tar.lzma
+                                  tar 能够通过查看输出或输入文件的扩展名来进行压缩。为了让tar 支持扩展名自动进行压缩，使用-a --auto-compress 选项
+                                  tar acvf archive.tar.gz filea fileb filec
+                       从归档文件中排除部分文件
+                                  tar -cf arch.tar * --exclude "*.txt"
+                                  tar -cf arch.tar * --exclude "*.txt" -X list 将需要排除的文件放入文件中；
+                       在归档完成之后打印出总归档字节数
+                                  tar -cf arc.tar * --exclude "*.txt" --totals
+
+使用gzip压缩数据
+                       gzip 只能压缩单个文件或数据流，无法对目录和多个文件进行归档，可以先创建tar归档文件，然后再用gzip 进行压缩
+                        
+                       使用gzip 压缩文件       gzip filename
+                       使用gunzip 解压缩文件   gunzip filename.gz
+                       列出压缩文件的属性信息  gzip -l test.txt.gz
+
+                       压缩归档文件    
+                                     tar -czvvf archive.tar.gz  files
+                                     tar -cavvf archive.tar.gz  files
+                       创建一个tar归档文件后压缩
+                                     tar -cvvf archive.tar files
+                                     gzip archive.tar
+                       提取经由gzip 压缩的归档文件中的内容
+                                     tar -xavf archive.tar.gz -C extract_directory
+                       zcat 无需解压缩，直接读取gzip格式文件
+                                     zcat test.gz
+                       压缩率 分为9级(1-9)       gzip -5 test.img
+
+
+
+使用bzip2
+                                                
+
+                        bzip2 filename            压缩
+                        bunzip2 filename.bzp      解压缩
+                        tar -xjvf archive.tar.bz2 提取文件            
+
+使用lzma
+                         lzma filename
+                         unlzma filename.lzma
+                         tar -cvf --lzma archive.tar.lzma files ; 或   tar -cavf archive.tar.lzma files
+                         tar -xvf --lzma archive.tar.lzma -C extract_directory ;或 tar -xavf archive.tar.lzma -C extract_directory
+
+                         
+
+
+
+                                  
+用zip归档和压缩
+
+                        对归档文件采用zip格式进行压缩    zip archive.zip file1 dir1
+                        对目录和文件进行递归操作         zip -r archive.zip  folder1 folder2
+                        从zip文件中提取内容              unzip file.zip
+                       
+                        如果需要更新压缩文件的内容，使用选项 -u       zip file.zip -u newfile
+                        从压缩文件中删除内容，则使用选项-d            zip -d arc.zip file.txt
+                        列出压缩文件中的内容                          unzip -l archive.zip
+
+ 
+                                                                 
