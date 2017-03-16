@@ -899,4 +899,70 @@ B计划
                         列出压缩文件中的内容                          unzip -l archive.zip
 
  
-                                                                 
+                                                                
+
+
+
+创建压缩文件系统
+
+                      添加源目录和文件，创建squashfs文件        
+                                        mksquashfs sources compressedfs.squashfs;      source 可以是通配符或文件或目录路径
+                      利用环回形式挂载squashfs文件
+                                        mkdir /mnt/squash
+                                        mount -o loop compressedfs.squashfs /mnt/squash
+
+
+                      在创建squashfs文件时排除部分文件 选项-e
+                                        sudo mksquashfs /etc test.squashfs -e /etc/passwd  /etc/shadow
+                      将排除的文件名列表写入文件后，使用选项-ef
+                                        sudo mksquashfs /etc test.squashfs -ef excludelist
+
+                      如果希望在排除文件表中使用通配符，可以使用-wildcard 选项
+
+使用rsync 备份系统快照
+                     rsync 命令用ssh链接远程主机，因此必须使用user@host这种形式设定远程主机的地址，user表示用户名，host表示远程主机的IP                    
+
+
+
+                      将源目录复制到目的端, -a表示进行归档，-v 在stdout上打印出细节信息或进度(递归进行)
+                                          rsync -av source_path destination_path
+                      将数据备份到远程服务器或主机
+                                          rsync -av source_dir  username@host:PATH         (它只会对更改过的文件进行复制)
+                      将远程主机上的数据恢复到本地主机
+                                          rsync -av username@host:PATH      destination
+                      
+                      通过网络进行传输时，压缩数据能够明显改善传输效率；使用-z选项指定在网络传输时压缩数据
+                      
+
+
+                      将一个目录中的内容同步到另一个目录               rsync -av /home/test/   /home/backups
+                      将包括目录本身在内的内容复制到另一个目录中       rsync -av /home/test    /home/backups
+
+
+                      在使用rsync 进行归档的过程中排除部分文件    --exclude pattern
+                                     rsync -avz /home/code/some_code /mnt/disk/backup/code --exclude "*txt"
+                      通过一个列表文件指定需要排除的文件 --exclude-from filePath
+
+
+                      在更新rsync 备份时，删除不存在的文件. 默认情况下，rsync并不会在目的端删除那些在源端已不存在的文件。
+                      如果要删除这些已不存在的文件，使用rsync的  --delete
+
+                                  rsync -avz source destination --delete
+
+
+用fsarchiver 创建全盘镜像
+                    
+                     创建文件系统/分区的备份
+                           fsarchiver savefs backup.fsa  /dev/sda1；     将/dev/sda/分区备份到 backup.fsa
+                     同时备份多个分区
+                           fsarchiver savefs backup.fsa   /dev/sda1  /dev/sda2
+                     从备份归档中恢复分区
+                           fsarchiver restfs backup.fsa  id=0,dest=/dev/sda1 id=1,dest=/dev/sdb1
+
+git基于版本控制的备份
+
+
+                                       
+                              
+                                         
+
