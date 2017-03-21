@@ -836,7 +836,7 @@ B计划
                                   添加选项可以将指定的任意文件加入到归档文件中。如果同名文件已经存在，那么结果就是归档文件中包含了两个同名的文件。
                                   可以使用-u选项指明:只有比归档文件中的同名文件更新时才会被添加。
                                   tar -uf archive.tar filea
-                       选项-u比较归档文件与文件系统中的同名文件是否相同
+                       选项-d比较归档文件与文件系统中的同名文件是否相同
                                   tar -df archive.tar
                        从归档文件中删除文件
                                   tar -f archive.tar --delete file1 file2
@@ -964,5 +964,51 @@ git基于版本控制的备份
 
                                        
                               
-                                         
 
+
+
+                                         
+无网而不利
+
+              列出当前网络接口                            ifconfig
+              手动设置网络接口的IP地址                    ifconfig wlan0 192.168.0.80 netmask 255.255.252.0
+              自动配置网络接口                            dhclient eth0
+
+              列出网络接口列表                            ifconfig |cut -c -10 | tr -d " " | tr -s "\n"
+              显示(特定网络接口) IP地址                   ifconfig wlan0
+              从ifconfig输出中提取IP地址                  ifconfig wlan0 | egrep -o "inet addr:[^ ]*" | grep -o "[0-9.]*"
+              硬件地址（MAC地址）欺骗                     ifconfig eth0 hw ether 00:1c:bf:87:25:d5     
+
+              
+              通过读取/etc/resolv.conf 查看分配给当前系统的名字服务器        cat/etc/resolv.conf
+              获取域名对应的IP地址                                           ping google.com
+
+              DNS查找host nsloopup
+              显示路由表信息   route -n
+              使用ping         ping -c 2 限制发送分组的数量
+
+
+列出网络上所有的活动主机
+
+                 ping.sh (2>/dev/null #   ()& 并行 #     ping -c 2#  for ip in 192.168.1.{0..255};# );
+
+                 fping -a 192.168.1/24 -g 或 fping -a 192.168.1.0  192.168.1.255 -g     
+                 fping -a <ip.list
+
+                 -a指定打印出所有活动的主机ip地址 -u 指定打印出无法到达的主机  -g 指定从"IP地址/子网掩码" 或 “IP地址范围"记法中生成一组IP地址
+
+
+使用SSH在远程主机上运行命令                           
+            
+                 连接运行ssh服务器的远程主机         ssh username@remote_host
+                 ssh服务器默认运行在22端口
+
+                
+                 在远程主机中执行命令，并将命令输出显示在本地shell中         ssh user@host  'command'
+
+
+                 ssh协议也支持对数据进行数据压缩-C                           ssh -C user@hostname commands
+
+                 将数据重定向至远程shell命令的stdin                          echo 'text' | ssh user@remote_host 'echo' 或 ssh user@remote_host 'echo' <file
+
+                 
