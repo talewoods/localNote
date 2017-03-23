@@ -979,6 +979,16 @@ git基于版本控制的备份
               从ifconfig输出中提取IP地址                  ifconfig wlan0 | egrep -o "inet addr:[^ ]*" | grep -o "[0-9.]*"
               硬件地址（MAC地址）欺骗                     ifconfig eth0 hw ether 00:1c:bf:87:25:d5     
 
+
+lo 回环网络接口：虚拟网络接口，并不真实的从外界接收和发送数据包，而是在系统内部接收和发送数据包，因此虚拟网络接口不需要驱动程序。如果包是由一个本地进程产生的，他们将通过外出链的lo接口，然后返回进入链的lo接口；
+
+路由器配置中可用0.0.0.0/0表示默认路由，作用是帮助路由器发送路由表中无法查询的包。gantway 为0.0.0.0 时表示本机直接相连
+
+
+
+
+
+
               
               通过读取/etc/resolv.conf 查看分配给当前系统的名字服务器        cat/etc/resolv.conf
               获取域名对应的IP地址                                           ping google.com
@@ -1011,4 +1021,29 @@ git基于版本控制的备份
 
                  将数据重定向至远程shell命令的stdin                          echo 'text' | ssh user@remote_host 'echo' 或 ssh user@remote_host 'echo' <file
 
-                 
+
+
+
+
+
+
+使用网络传输文件
+
+       使用lftp 命令访问ftp服务器来进行文件传输
+                        连接ftp服务器             lftp username@ftphost  
+                        使用cd directory    改变目录
+                        使用lcd 改变本地主机的目录
+                        用mkdir 创建目录
+                        列出远程机器当前目录下的文件使用Is
+                        使用get filename 下载文件
+                        使用put filename 从当前目录上传文件
+                        使用quit 退出lftp会话
+
+     sftp是一个类似ftp的文件传输系统，它运行在ssh链接之上并模拟成ftp接口，它不需要远端运行ftp服务器来进行文件传输，但必须安装并运行openssl服务器。
+     rsync
+     scp是一项更安全的文件复制技术，文件均通过ssh加密通道进行传输
+                   scp source destination
+                   source 或destination 可以采用形如username@host :/path 格式
+                   将远程文件复制到当前目录，并采用给定的文件名       scp user@remotehost:/home/path/filename filename    
+                   如果ssh没有运行在端口22 使用-oPort 指定
+                   scp -r 递归传送文件夹中的文件 -p 保留权限             
